@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <table style="border:1px solid black">
+        <tr>
+        <td>TransactionID</td><td>TradeID</td>
+        <td>Version</td><td>Security</td><td>Quantity</td><td>Action</td>
+        <td>Buy/Sell</td>
+        </tr>
+        <tr th:each="tra:${list}">
+            <td th:text="${tra.transactionID}"/>
+            <td th:text="${tra.tradeID}"/>
+            <td th:text="${tra.version}"/>
+            <td th:text="${tra.securityCode}"/>
+            <td th:text="${tra.quantity}"/>
+            <td th:text="${tra.action}"/>
+            <td th:text="${tra.buySell}"/>
+        </tr>
+    </table>
+    
+    <form action="/add" method="post">
+    tradeID:<input name="tradeID">
+    securityCode:<input name="securityCode">
+    quantity:<input name="quantity">
+    buy/sell:<input name="buySell">
+    <br>
+    <input type="submit" value="add">
+    </form>
+    
+    <br>
+     <form action="/update" method="post">
+    transactionID:<input name="transactionID">
+    securityCode:<input name="securityCode">
+    quantity:<input name="quantity">
+    buy/sell:<input name="buySell">
+    <br>
+    <input type="submit" value="update">
+    </form>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.demo.dao.TransactionDao">
+    <select id="selectAll" resultType="transaction">
+    select * from Transactions;
+     </select>
+     
+	<select id ="selectOutput" resultType="transaction">
+	select t1.tradeid,t1.version,t1.securitycode,t1.quantity,t1.action,t1.buysell 
+	from transactions t1
+	where t1.version = (select max(version) from transactions where t1.tradeid=tradeid)
+	order by tradeid
+	</select>
+	
+	<select id="selectId" resultType="int">
+	select tradeid from transactions
+	</select>
+	
+     <insert id="insertById">
+     insert into Transactions 
+     values(
+     (select max(TransactionID) FROM Transactions)+1,
+     #{tradeID},
+     (SELECT COALESCE(max(version)+1,1)FROM Transactions where tradeID =#{tradeID}),
+     #{securityCode},
+     #{quantity},
+     'INSERT',
+     #{buySell});	
+     </insert>
+     
+     <insert id="updateById">
+     insert into Transactions 
+     values(
+     (select max(TransactionID) FROM Transactions)+1,
+     #{tradeID},
+     (SELECT COALESCE(max(version)+1,1)FROM Transactions where tradeID =#{tradeID}),
+     #{securityCode},
+     #{quantity},
+     'UPDATE',
+     #{buySell});	
+     </insert>
+     
+      <insert id="cancelById">
+     insert into Transactions 
+     values(
+     (select max(TransactionID) FROM Transactions)+1,
+     #{tradeID},
+     (SELECT COALESCE(max(version)+1,1)FROM Transactions where tradeID =#{tradeID}),
+     #{securityCode},
+     #{quantity},
+     'CANCEL',
+     #{buySell});	
+     </insert>
+</mapper>

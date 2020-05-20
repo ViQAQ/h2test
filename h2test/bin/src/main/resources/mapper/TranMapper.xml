@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.demo.dao.TransactionDao">
+    <select id="selectAll" resultType="transaction">
+    select * from Transactions;
+     </select>
+     
+     <insert id="insertById">
+     insert into Transactions 
+     values(
+     (select max(TransactionID) FROM Transactions)+1,
+     #{tradeID},
+     (SELECT COALESCE(max(version)+1,1)FROM Transactions where tradeID =#{tradeID}),
+     #{securityCode},
+     #{quantity},
+     'insert',
+     #{buySell});	
+     </insert>
+     
+     <update id="updateById">
+     update Transactions
+     set version = (select version FROM Transactions where TransactionID=#{transactionID})+1,
+     securityCode = #{securityCode},
+     quantity = #{quantity},
+     buySell = #{buySell}
+     where transactionID=#{transactionID}
+     </update>
+</mapper>
